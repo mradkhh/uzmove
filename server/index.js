@@ -8,6 +8,8 @@ const errorMiddleware = require('./middlewares/error-middleware')
 
 const PORT = process.env.PORT || 5000
 const app = express()
+
+// middleware
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors());

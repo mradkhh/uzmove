@@ -4,13 +4,14 @@ const UserDto = require('../dtos/user-dto')
 const UserModel = require('../models/user-model')
 const mailService = require('../service/mail-service')
 const tokenService  = require('../service/token-service')
-const {Error} = require("mongoose");
+const ApiError = require('../exceptions/api-error')
+
 
 class UserService {
     async registration(email, password) {
         const candidate = await UserModel.findOne({ email })
         if (candidate) {
-            throw new Error(`${email} already authorized`)
+            throw new ApiError.BadRequest(`${email} already authorized`)
         }
         const hashPassword = await bcrypt.hash(password, 3)
         const activationLink = uuid.v4();
@@ -25,14 +26,27 @@ class UserService {
         return { ...tokens, user: userDto }
     }
 
-    async activate(activationLink) {
-        const user = await UserModel.findOne({activationLink})
+    async login(email, password) {
+        const user = await UserModel.findOne({ email })
         if (!user) {
-            throw new Error('invalid link')
+            throw ApiError.BadRequest(`User's email not found`)
         }
-        user.isActivated  = true;
-        await user.save();
+        const isPassEquals = await bcrypt.compare(password, user.password)
+        if (!isPassEquals) {
+            throw ApiError.BadRequest('Invalid password')
+        }
+        const userDto = new UserDto(user)
+        const tokens = tokenService.generateToken({ ...userDto })
+
+        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+        return { ...tokens, user: userDto }
     }
+
+    async logout(refreshToken) {
+        const token = await tokenService.removeToken(refreshToken)
+        return token
+    }
+
 }
 
 module.exports = new UserService()
