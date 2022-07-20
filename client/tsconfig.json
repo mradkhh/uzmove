@@ -25,6 +25,8 @@
       "hooks/*": ["hooks/*"],
       "models/*": ["models/*"],
       "http/*": ["http/*"],
+      "services/*": ["services/*"],
+      "store/*": ["store/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
