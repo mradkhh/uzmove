@@ -23,6 +23,8 @@
       "pages/*": ["pages/*"],
       "helpers/*": ["helpers/*"],
       "hooks/*": ["hooks/*"],
+      "models/*": ["models/*"],
+      "http/*": ["http/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
