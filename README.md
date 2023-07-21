@@ -1,13 +1,13 @@
 # UZMOVI
 ## FullStack Web App
 
-# Client:
+### Client:
 - React Js
 - Next Js
 - Axios
 - Swiper
 
-# Server
+### Server
 - Express Js
 - MongoDb
 - Mongoose
